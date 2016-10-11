@@ -3,7 +3,7 @@
 	)
 
 ;(define (run1)
-;	(iterate i (list 5) (inspect i))
+;	(iterate i (list 5 2 4) (inspect i))
 ;)
 
 (define (iterate # $i lst $)
@@ -16,12 +16,12 @@
 	    )
 	  )
 	)
-	(define ll (eval l #))
+	(define ll (eval l this))
 (inspect ll)
 	(define $i (getElement lst 0))
 (inspect $i)
 (ppTable #)
-	(ll (eval $i #))
+	(eval (ll  $i) #)
 )
 
 
@@ -76,8 +76,10 @@
 
 (define (no-locals @)
 	(define lam (cons
-	 (car @) nil))
-	(inspect lam)
+	 (car (car @)) (cdr (car @))))
+	(inspect (car lam))
+	(inspect (cdr lam))
+	(no-locals (cdr lam))
 )
 
 (define (pred)
