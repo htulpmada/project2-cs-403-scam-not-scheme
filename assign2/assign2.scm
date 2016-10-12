@@ -24,6 +24,15 @@
 	(eval (ll  $i) #)
 )
 
+(define (run2)
+	(define (f x y z) (+ x y z))
+	(inspect((peval f 1 2 ) 3))
+)
+
+(define (peval f . a) 
+	(define l (lambda (b) (f b a)))
+;(inspect l)
+)
 
 (define (Stack)
 	(define size 0)
