@@ -92,7 +92,10 @@
 )
 
 (define (pred)
-
+;church to int
+;int -1
+;int to church 
+;all using helper functions on website
 )
 
 
