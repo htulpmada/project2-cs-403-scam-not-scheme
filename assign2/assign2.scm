@@ -24,10 +24,10 @@
 	(eval (ll  $i) #)
 )
 
-(define (run2)
-	(define (f x y z) (+ x y z))
-	(inspect((peval f 1 2 ) 3))
-)
+;(define (run2)
+;	(define (f x y z) (+ x y z))
+;	(inspect((peval f 1 2 ) 3))
+;)
 
 (define (peval f . a) 
 	(define l (lambda (b) (f b a)))
@@ -88,15 +88,54 @@
 	 (car (car @)) (cdr (car @))))
 	(inspect (car lam))
 	(inspect (cdr lam))
-	(no-locals (cdr lam))
+;	(cond
+;	((? lam nil) lam)
+;	(no-locals (cdr lam));)
 )
-
-(define (pred)
+(define (run5)
+	(define zero (lambda (f) (lambda (x) x)))
+	(define one  (lambda (f) (lambda (x) (f x))))
+	(define two  (lambda (f) (lambda (x) (f (f x)))))
+	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
+;	(inspect(pred zero))
+	(inspect(((pred one)+)0))
+	(inspect(((pred two)+)1))
+	(inspect(pred three))
+)
+(define (pred l)
+	(define zero (lambda (f) (lambda (x) x)))
+	(define succ 
+	    (lambda (n)
+		(lambda (f)
+		    (lambda (x)
+			(f ((n f) x))
+		    )
+		)
+	    )
+	)
 ;church to int
+	(define (c->i chrch)
+	  (
+	  (chrch
+		(lambda (a) (+ a 1))
+	  )
+	  0
+	  )
+	)
 ;int -1
 ;int to church 
+	(define (i->c n)
+		(if (= n 0)
+			zero
+			(succ (i->c (- n 1)))
+		)
+	)
+(define i (c->i l))
+(i->c (- i 1))
 ;all using helper functions on website
 )
+
+
 
 
 ;-----------------------------test functions----------------------------------
