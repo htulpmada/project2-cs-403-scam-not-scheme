@@ -135,7 +135,124 @@
 ;all using helper functions on website
 )
 
+(define (run7)
+	(inspect (queens 0))
+	(inspect (queens 1))
+	(inspect (queens 2))
+	(inspect (queens 3))
+	(inspect (queens 4))
+	(inspect (length(queens 5)))
+)
 
+;queens function
+
+(define (enum low high)
+;	(inspect low)
+;	(inspect high)
+	(if (> low high)
+		'()
+		(cons low (enum (+ low 1) high))))
+
+(define (filter pred seq)
+	(cond ((null? seq) '())
+		((pred (car seq))
+		(cons (car seq)
+			(filter pred (cdr seq))))
+		(else (filter pred (cdr seq)))))
+
+(define (accumulate op init seq)
+	(if (null? seq)
+		init
+		(op (car seq)
+			(accumulate op init (cdr seq)))))
+(define (flatmap pro s)
+;(inspect s)
+	(accumulate append '() (map pro s)))
+
+;main 
+
+(define (queens size)
+	(define (q-col k)
+;	(inspect size)
+		(if (= k 0);make iterative will order correctly
+			(list empty-b)
+				(filter
+				(lambda (pos) (safe k pos))
+				(flatmap
+				(lambda (rest)
+					(map (lambda (newr)
+						(adjoinPos newr k rest))
+;						(inspect rest)
+						(enum 1 size)))
+			(q-col (- k 1))))))
+		(define answer(q-col size))
+		(cond ((equal? answer nil) empty-b) 
+			(else answer ))
+)
+
+(define empty-b '())
+
+(define (adjoinPos new-r k rest)
+;(inspect rest)
+	(cons (list k new-r) rest))
+
+(define (safe k posistions)
+;(inspect k)
+;(inspect posistions)
+	(define (safe-r?)
+	  (null? (filter (lambda (pos) (= (cadr pos) (cadar posistions)))
+	(cdr posistions))))
+	(define (safe-d?)
+	  (null? (filter (lambda (pos) (= (abs (- (caar posistions) (car pos))) (abs (- (cadar posistions) (cadr pos))))) (cdr posistions))))
+;(inspect (safe-r?))
+;(inspect (safe-d?))
+	(and (safe-r?) (safe-d?)))
+
+(define (last-col-p k)
+	(map (lambda (j) (list j k))
+		(enum 1 (- k 1))))
+
+(define (cadar l)
+	(car (cdr (car l)))
+)
+
+(define (run8)
+	(inspect(cxr 'a))
+	(inspect(cxr 'd))
+	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
+)
+
+(define (cxr a)
+	(define a (string a))
+	(define (customEval arg)
+;	(inspect (list? arg))
+;	(inspect (car arg))
+	(inspect  arg)
+;	(inspect  (equal? arg "a"))
+		(cond
+		((null? arg) nil)
+		((equal? (car arg) "a");------------this is backwards------- 
+	;		(define s (customEval (cdr arg))	
+			(cons '(define x (car x)) (customEval (cdr arg)))
+		)
+		((equal? (car arg) "d") 
+			(cons '(define x (cdr x)) (customEval (cdr arg)))
+		)
+		(else 
+		(inspect (cdr arg))
+		(customEval (cdr arg))))
+	)
+	(define l (cons
+		'lambda
+		(cons '(x)
+			(customEval a);needs to return cons symbols for x in cxr
+			)
+		)
+	)
+(inspect l)
+	(define lam (eval l this))
+
+)
 
 
 ;-----------------------------test functions----------------------------------
