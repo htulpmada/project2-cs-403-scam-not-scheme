@@ -5,6 +5,7 @@
 ;(define (run1)
 ;	(iterate i (list 5 2 4) (inspect i))
 ;)
+;-----------task 1------------;
 
 (define (iterate # $i lst $)
 	(define l 
@@ -28,11 +29,14 @@
 ;	(define (f x y z) (+ x y z))
 ;	(inspect((peval f 1 2 ) 3))
 ;)
+;-----------task 2-----------;
 
 (define (peval f . a) 
 	(define l (lambda (b) (f b a)))
 ;(inspect l)
 )
+
+;-----------task 3-----------;
 
 (define (Stack)
 	(define size 0)
@@ -83,6 +87,8 @@
 ;(length store)
 )
 
+;----------task 4----------;
+
 (define (no-locals @)
 	(define lam (cons
 	 (car (car @)) (cdr (car @))))
@@ -101,6 +107,9 @@
 	(inspect(((pred two)+)1))
 	(inspect(pred three))
 )
+
+;-------------task 5-----------;
+
 (define (pred l)
 	(define zero (lambda (f) (lambda (x) x)))
 	(define succ 
@@ -185,7 +194,7 @@
 						(enum 1 size)))
 			(q-col (- k 1))))))
 		(define answer(q-col size))
-		(cond ((equal? answer nil) empty-b) 
+		(cond ((equal? answer nil) "()") 
 			(else answer ))
 )
 
@@ -211,6 +220,7 @@
 )
 
 ;-------task 8--------;
+
 (define (run8)
 	(inspect(cxr 'a))
 	(inspect(cxr 'd))
