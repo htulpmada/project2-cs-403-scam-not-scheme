@@ -97,7 +97,6 @@
 	(define one  (lambda (f) (lambda (x) (f x))))
 	(define two  (lambda (f) (lambda (x) (f (f x)))))
 	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
-;	(inspect(pred zero))
 	(inspect(((pred one)+)0))
 	(inspect(((pred two)+)1))
 	(inspect(pred three))
@@ -113,7 +112,7 @@
 		)
 	    )
 	)
-;church to int
+	
 	(define (c->i chrch)
 	  (
 	  (chrch
@@ -122,18 +121,24 @@
 	  0
 	  )
 	)
-;int -1
-;int to church 
+	
 	(define (i->c n)
 		(if (= n 0)
 			zero
 			(succ (i->c (- n 1)))
 		)
 	)
-(define i (c->i l))
-(i->c (- i 1))
-;all using helper functions on website
+	
+	;church to int
+	;int -1
+	;int to church 
+	(define i (c->i l))
+	(i->c (- i 1))
 )
+
+
+
+;-----------task 7-------------;
 
 (define (run7)
 	(inspect (queens 0))
@@ -143,12 +148,9 @@
 	(inspect (queens 4))
 	(inspect (length(queens 5)))
 )
-
 ;queens function
 
 (define (enum low high)
-;	(inspect low)
-;	(inspect high)
 	(if (> low high)
 		'()
 		(cons low (enum (+ low 1) high))))
@@ -166,15 +168,13 @@
 		(op (car seq)
 			(accumulate op init (cdr seq)))))
 (define (flatmap pro s)
-;(inspect s)
 	(accumulate append '() (map pro s)))
 
 ;main 
 
 (define (queens size)
 	(define (q-col k)
-;	(inspect size)
-		(if (= k 0);make iterative will order correctly
+		(if (= k 0)
 			(list empty-b)
 				(filter
 				(lambda (pos) (safe k pos))
@@ -182,7 +182,6 @@
 				(lambda (rest)
 					(map (lambda (newr)
 						(adjoinPos newr k rest))
-;						(inspect rest)
 						(enum 1 size)))
 			(q-col (- k 1))))))
 		(define answer(q-col size))
@@ -193,19 +192,14 @@
 (define empty-b '())
 
 (define (adjoinPos new-r k rest)
-;(inspect rest)
 	(cons (list k new-r) rest))
 
 (define (safe k posistions)
-;(inspect k)
-;(inspect posistions)
 	(define (safe-r?)
 	  (null? (filter (lambda (pos) (= (cadr pos) (cadar posistions)))
 	(cdr posistions))))
 	(define (safe-d?)
 	  (null? (filter (lambda (pos) (= (abs (- (caar posistions) (car pos))) (abs (- (cadar posistions) (cadr pos))))) (cdr posistions))))
-;(inspect (safe-r?))
-;(inspect (safe-d?))
 	(and (safe-r?) (safe-d?)))
 
 (define (last-col-p k)
@@ -216,42 +210,33 @@
 	(car (cdr (car l)))
 )
 
+;-------task 8--------;
 (define (run8)
 	(inspect(cxr 'a))
 	(inspect(cxr 'd))
 	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
+	(inspect(cxr 'dddad))
+	(inspect(cxr 'adddaaa))
 )
 
 (define (cxr a)
 	(define a (string a))
 	(define (customEval arg)
-;	(inspect (list? arg))
-;	(inspect (car arg))
-	(inspect  arg)
-;	(inspect  (equal? arg "a"))
 		(cond
 		((null? arg) nil)
 		((equal? (car arg) "a");------------this is backwards------- 
-	;		(define s (customEval (cdr arg))	
 			(cons '(define x (car x)) (customEval (cdr arg)))
 		)
 		((equal? (car arg) "d") 
 			(cons '(define x (cdr x)) (customEval (cdr arg)))
 		)
 		(else 
-		(inspect (cdr arg))
 		(customEval (cdr arg))))
 	)
-	(define l (cons
-		'lambda
-		(cons '(x)
-			(customEval a);needs to return cons symbols for x in cxr
-			)
-		)
-	)
-(inspect l)
+(define i (reverse (customEval a)))
+(define l (cons 'lambda (cons '(x) i)))
+;(inspect l) ;-----------view final lambda----------;
 	(define lam (eval l this))
-
 )
 
 
