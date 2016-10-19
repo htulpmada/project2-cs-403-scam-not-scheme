@@ -1,6 +1,9 @@
 (define (author)
 	(println "AUTHOR: Adam Pluth apluth@crimson.ua.edu")
-	)
+)
+(include "table.scm")
+
+
 
 ;(define (run1)
 ;	(iterate i (list 5 2 4) (inspect i))
@@ -251,8 +254,43 @@
 
 ;---------------task 9-----------------;
 
+(define (run9)
+	
+)
 
 
+(define old+ +)
+(define old- -)
+(define old* *)
+(define old/ /)
+(define (install-generic)
+	(clearTable)
+	(set! + (lambda( a b) (appply-generic '+ a b)))
+	(set! - (lambda( a b) (appply-generic '- a b)))
+	(set! * (lambda( a b) (appply-generic '* a b)))
+	(set! / (lambda( a b) (appply-generic '/ a b)))
+	(putTable '+ '(STRING STRING) addStrings)
+	(putTable '+ '(STRING INTEGER) addStringAndInteger)
+	(putTable '+ '(INTEGER STRING) addIntegerAndString)
+	(putTable '- '(STRING STRING) subStrings)
+	(putTable '- '(STRING INTEGER) subStringAndInteger)
+	(putTable '- '(INTEGER STRING) subIntegerAndString)
+	(putTable '* '(STRING STRING) mulStrings)
+	(putTable '* '(STRING INTEGER) mulStringAndInteger)
+	(putTable '* '(INTEGER STRING) mulIntegerAndString)
+	(putTable '/ '(STRING STRING) divStrings)
+	(putTable '/ '(STRING INTEGER) divStringAndInteger)
+	(putTable '/ '(INTEGER STRING) divIntegerAndString)
+	'generic-system-installed
+	)
+
+(define (unistall-generic)
+	(set! + old+)
+	(set! - old-)
+	(set! * old*)
+	(set! / old/)
+	'generic-system-uninstalled
+)
 
 ;-----------------------------test functions----------------------------------
 ;(define (run1)
