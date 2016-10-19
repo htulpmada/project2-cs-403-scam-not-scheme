@@ -245,9 +245,13 @@
 	)
 (define i (reverse (customEval a)))
 (define l (cons 'lambda (cons '(x) i)))
-;(inspect l) ;-----------view final lambda----------;
+(inspect l) ;-----------view final lambda----------;
 	(define lam (eval l this))
 )
+
+;---------------task 9-----------------;
+
+
 
 
 ;-----------------------------test functions----------------------------------
