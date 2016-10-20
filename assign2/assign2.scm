@@ -159,6 +159,7 @@
 	(inspect (queens 3))
 	(inspect (queens 4))
 	(inspect (length(queens 5)))
+	(inspect (length(queens 8)))
 )
 ;queens function
 
