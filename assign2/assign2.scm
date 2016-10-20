@@ -159,7 +159,7 @@
 	(inspect (queens 3))
 	(inspect (queens 4))
 	(inspect (length(queens 5)))
-	(inspect (length(queens 8)))
+;	(inspect (length(queens 7)))
 )
 ;queens function
 
@@ -256,20 +256,35 @@
 ;---------------task 9-----------------;
 
 (define (run9)
+	 (inspect apply-generic)
+        (inspect (install-generic))
+       ; (ppTable (+ 0 0))
 	
 )
-
-
 (define old+ +)
 (define old- -)
 (define old* *)
 (define old/ /)
+
+(define (makeString x)
+	(list 'STRING x)
+)
+(define (makeInteger y)
+	(list 'INTEGER y)
+)
+(define (type a)
+	(car a)
+)
+(define (contents a)
+	(cdr a)
+)
+
 (define (install-generic)
 	(clearTable)
-	(set! + (lambda( a b) (appply-generic '+ a b)))
-	(set! - (lambda( a b) (appply-generic '- a b)))
-	(set! * (lambda( a b) (appply-generic '* a b)))
-	(set! / (lambda( a b) (appply-generic '/ a b)))
+	(set! + (lambda( a b) (apply-generic '+ a b)))
+	(set! - (lambda( a b) (apply-generic '- a b)))
+	(set! * (lambda( a b) (apply-generic '* a b)))
+	(set! / (lambda( a b) (apply-generic '/ a b)))
 	(putTable '+ '(STRING STRING) addStrings)
 	(putTable '+ '(STRING INTEGER) addStringAndInteger)
 	(putTable '+ '(INTEGER STRING) addIntegerAndString)
@@ -292,6 +307,54 @@
 	(set! / old/)
 	'generic-system-uninstalled
 )
+
+(define (apply-generic op . args )
+	(let* ((types (map type args))
+		(f (get op types)))
+		(apply f (map contents args))
+	)
+)
+
+(define (addStrings s1 s2)
+	(append s1 s2)
+)
+(define (addStringAndInteger s i)
+	(append s (String i))
+)
+(define (addIntegerAndString i s)
+	(old+ i (Integer s))
+)
+(define (subStrings s1 s2)
+
+)
+(define (subStringAndInteger s i)
+
+)
+(define (subIntegerAndString i s)
+
+)
+(define (mulStrings s1 s2)
+
+)
+(define (mulStringAndInteger s i)
+
+)
+(define (mulIntegerAndString i s)
+
+)
+(define (divStrings s1 s2)
+
+)
+(define (divStringAndInteger s i)
+
+)
+(define (divIntegerAndString i s)
+
+)
+
+
+
+
 
 
 ;-----------------------------test functions----------------------------------
