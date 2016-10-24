@@ -5,9 +5,9 @@
 
 
 
-;(define (run1)
-;	(iterate i (list 5 2 4) (inspect i))
-;)
+(define (run1)
+	(iterate i (list 5 2 4) (inspect i))
+)
 ;-----------task 1------------;
 
 (define (iterate # $i lst $)
@@ -15,17 +15,26 @@
 	  (cons
 	    'lambda
 	      (cons 
-		'(x)
-	        (cons $ nil)
+		'(i)
+	        $ 
 	    )
 	  )
 	)
 	(define ll (eval l this))
-(inspect ll)
-	(define $i (getElement lst 0))
-(inspect $i)
-(ppTable #)
-	(eval (ll  $i) #)
+	(define (it scope $i lst lam)
+;(inspect lst)
+	  (cond ((=(length lst) 1)   
+		(define $i (car lst))
+		(eval (ll $i) scope)
+	  )
+		(else 	(define $i (car lst))
+			(eval (ll $i) scope)
+			(it scope $i (cdr lst) lam)))
+)
+	(define $i (car lst))
+;(inspect $i)
+;	(eval (ll $i) #)
+	(it # $i lst ll)
 )
 
 ;(define (run2)
@@ -34,10 +43,10 @@
 ;)
 ;-----------task 2-----------;
 
-(define (peval f . a) 
-	(define l (lambda (b) (f b a)))
+;(define (peval f . a) 
+;	(define l (lambda (b) (f b a)))
 ;(inspect l)
-)
+;)
 
 ;-----------task 3-----------;
 
@@ -101,15 +110,15 @@
 ;	((? lam nil) lam)
 ;	(no-locals (cdr lam));)
 )
-(define (run5)
-	(define zero (lambda (f) (lambda (x) x)))
-	(define one  (lambda (f) (lambda (x) (f x))))
-	(define two  (lambda (f) (lambda (x) (f (f x)))))
-	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
-	(inspect(((pred one)+)0))
-	(inspect(((pred two)+)1))
-	(inspect(pred three))
-)
+;(define (run5)
+;	(define zero (lambda (f) (lambda (x) x)))
+;	(define one  (lambda (f) (lambda (x) (f x))))
+;	(define two  (lambda (f) (lambda (x) (f (f x)))))
+;	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
+;	(inspect(((pred one)+)0))
+;	(inspect(((pred two)+)1))
+;	(inspect(pred three))
+;)
 
 ;-------------task 5-----------;
 
@@ -152,15 +161,15 @@
 
 ;-----------task 7-------------;
 
-(define (run7)
-	(inspect (queens 0))
-	(inspect (queens 1))
-	(inspect (queens 2))
-	(inspect (queens 3))
-	(inspect (queens 4))
-	(inspect (length(queens 5)))
+;(define (run7)
+;	(inspect (queens 0))
+;	(inspect (queens 1))
+;	(inspect (queens 2))
+;	(inspect (queens 3))
+;	(inspect (queens 4))
+;	(inspect (length(queens 5)))
 ;	(inspect (length(queens 7)))
-)
+;)
 ;queens function
 
 (define (enum low high)
@@ -225,13 +234,13 @@
 
 ;-------task 8--------;
 
-(define (run8)
-	(inspect(cxr 'a))
-	(inspect(cxr 'd))
-	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
-	(inspect(cxr 'dddad))
-	(inspect(cxr 'adddaaa))
-)
+;(define (run8)
+;	(inspect(cxr 'a))
+;	(inspect(cxr 'd))
+;	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
+;	(inspect(cxr 'dddad))
+;	(inspect(cxr 'adddaaa))
+;)
 
 (define (cxr a)
 	(define a (string a))
@@ -255,12 +264,12 @@
 
 ;---------------task 9-----------------;
 
-(define (run9)
-	 (inspect apply-generic)
-        (inspect (install-generic))
-       ; (ppTable (+ 0 0))
-	
-)
+;(define (run9)
+;	 (inspect apply-generic)
+;        (inspect (install-generic))
+;       ; (ppTable (+ 0 0))
+;	
+;)
 (define old+ +)
 (define old- -)
 (define old* *)
@@ -366,12 +375,12 @@
 
 ;)
 
-(define (run3)
-(inspect (Stack))
-(inspect (push (Stack) 1))
-(inspect (push (push (Stack) 1)2))
-(inspect (pop (push (push (Stack) 1) 2)))
-(inspect (ssize (pop (push (push (Stack) 1) 2))))
+;(define (run3)
+;(inspect (Stack))
+;(inspect (push (Stack) 1))
+;(inspect (push (push (Stack) 1)2))
+;(inspect (pop (push (push (Stack) 1) 2)))
+;(inspect (ssize (pop (push (push (Stack) 1) 2))))
 (define (loop stack queue x)
         (define x (+ x 1 ))
         (if (= x 10)
@@ -387,14 +396,14 @@
             ((!= (qsize q) 0)
                 (inspect (speek q))
                 (dequeuer (dequeue q)))))
-(define data (loop (Stack) (Queue)0))
-(popper (car data))
-(dequeuer (cadr data))
-)
+;(define data (loop (Stack) (Queue)0))
+;(popper (car data))
+;(dequeuer (cadr data))
+;)
 
-(define (run4)
+;(define (run4)
 ;	(no-locals )
-)
+;)
 
 ;(define (run5)
 
