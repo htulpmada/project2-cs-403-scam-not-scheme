@@ -249,7 +249,7 @@
 	)
 (define i (reverse (customEval a)))
 (define l (cons 'lambda (cons '(x) i)))
-(inspect l) ;-----------view final lambda----------;
+;(inspect l) ;-----------view final lambda----------;
 	(define lam (eval l this))
 )
 
@@ -300,7 +300,7 @@
 	'generic-system-installed
 	)
 
-(define (unistall-generic)
+(define (uninstall-generic)
 	(set! + old+)
 	(set! - old-)
 	(set! * old*)
@@ -309,10 +309,10 @@
 )
 
 (define (apply-generic op . args )
-	(let* ((types (map type args))
-		(f (get op types)))
-		(apply f (map contents args))
-	)
+;	(let* ((types (map type args))
+;		(f (get op types)))
+;		(apply f (map contents args))
+;	)
 )
 
 (define (addStrings s1 s2)
