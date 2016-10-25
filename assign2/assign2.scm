@@ -5,9 +5,6 @@
 
 
 
-(define (run1)
-	(iterate i (list 5 2 4) (inspect i))
-)
 ;-----------task 1------------;
 
 (define (iterate # $i lst $)
@@ -37,10 +34,6 @@
 	(it # $i lst ll)
 )
 
-;(define (run2)
-;	(define (f x y z) (+ x y z))
-;	(inspect((peval f 1 2 ) 3))
-;)
 ;-----------task 2-----------;
 
 ;(define (peval f . a) 
@@ -51,6 +44,7 @@
 ;-----------task 3-----------;
 
 (define (Stack)
+	;(cons
 	(define size 0)
 	(define store nil)
 )
@@ -110,15 +104,7 @@
 ;	((? lam nil) lam)
 ;	(no-locals (cdr lam));)
 )
-;(define (run5)
-;	(define zero (lambda (f) (lambda (x) x)))
-;	(define one  (lambda (f) (lambda (x) (f x))))
-;	(define two  (lambda (f) (lambda (x) (f (f x)))))
-;	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
-;	(inspect(((pred one)+)0))
-;	(inspect(((pred two)+)1))
-;	(inspect(pred three))
-;)
+
 
 ;-------------task 5-----------;
 
@@ -234,13 +220,6 @@
 
 ;-------task 8--------;
 
-;(define (run8)
-;	(inspect(cxr 'a))
-;	(inspect(cxr 'd))
-;	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
-;	(inspect(cxr 'dddad))
-;	(inspect(cxr 'adddaaa))
-;)
 
 (define (cxr a)
 	(define a (string a))
@@ -264,12 +243,6 @@
 
 ;---------------task 9-----------------;
 
-;(define (run9)
-;	 (inspect apply-generic)
-;        (inspect (install-generic))
-;       ; (ppTable (+ 0 0))
-;	
-;)
 (define old+ +)
 (define old- -)
 (define old* *)
@@ -367,12 +340,15 @@
 
 
 ;-----------------------------test functions----------------------------------
-;(define (run1)
-
-;)
+(define (run1)
+	(inspect (iterate i (list 5 2 4) (inspect i)))
+	(inspect (iterate i (list 4 8 1) (inspect i) (inspect (+ i i))))
+	(inspect (iterate i (list 5 7 1) (inspect i) (inspect (* i i))))
+)
 
 ;(define (run2)
-
+;	(define (f x y z) (+ x y z))
+;	(inspect((peval f 1 2 ) 3))
 ;)
 
 ;(define (run3)
@@ -406,7 +382,13 @@
 ;)
 
 ;(define (run5)
-
+;	(define zero (lambda (f) (lambda (x) x)))
+;	(define one  (lambda (f) (lambda (x) (f x))))
+;	(define two  (lambda (f) (lambda (x) (f (f x)))))
+;	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
+;	(inspect(((pred one)+)0))
+;	(inspect(((pred two)+)1))
+;	(inspect(pred three))
 ;)
 
 ;(define (run6)
@@ -414,15 +396,28 @@
 ;)
 
 ;(define (run7)
-
+;	(inspect (queens 0))
+;	(inspect (queens 1))
+;	(inspect (queens 2))
+;	(inspect (queens 3))
+;	(inspect (queens 4))
+;	(inspect (length(queens 5)))
+;	(inspect (length(queens 7)))
 ;)
 
 ;(define (run8)
-
+;	(inspect(cxr 'a))
+;	(inspect(cxr 'd))
+;	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
+;	(inspect(cxr 'dddad))
+;	(inspect(cxr 'adddaaa))
 ;)
 
 ;(define (run9)
-
+;	 (inspect apply-generic)
+;        (inspect (install-generic))
+;       ; (ppTable (+ 0 0))
+;	
 ;)
 
 ;(define (run10)
