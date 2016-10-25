@@ -37,18 +37,39 @@
 ;-----------task 2-----------;
 
 ;(define (peval f . a) 
-;	(define l (lambda (b) (f b a)))
+;	(define l 
+;(lambda (b) (f b a)))
 ;(inspect l)
 ;)
+
+(define (peval fn @)
+
+;	(inspect @)
+	(define (ffn @)
+		(define arg1 @)
+;		(inspect arg1)
+		(lambda (opt-arg)
+			(cond((null? opt-arg) arg1)
+				;(inspect 2)
+				;((null? agr1) opt-arg)
+				(ffn (fn (car opt-arg) ag1))
+			)
+		)
+	)
+	(inspect @)
+	ffn
+)
+
 
 ;-----------task 3-----------;
 
 (define (Stack)
-	;(cons
+	;(cons 0 nil)
 	(define size 0)
 	(define store nil)
 )
 (define (push store x)
+	
 	(define store (cons x store))
 )
 (define (speek store)
@@ -108,40 +129,42 @@
 
 ;-------------task 5-----------;
 
-(define (pred l)
-	(define zero (lambda (f) (lambda (x) x)))
-	(define succ 
+(define pred 
+;(define pred
 	    (lambda (n)
 		(lambda (f)
 		    (lambda (x)
-			(f ((n f) x))
+			(((n succ) (lambda (u) x)) (lambda (u) u))
 		    )
 		)
 	    )
 	)
-	
-	(define (c->i chrch)
-	  (
-	  (chrch
-		(lambda (a) (+ a 1))
-	  )
-	  0
-	  )
-	)
-	
-	(define (i->c n)
-		(if (= n 0)
-			zero
-			(succ (i->c (- n 1)))
-		)
-	)
-	
+(define zero (lambda (u) x))
+(define succ (lambda (b) (lambda (h) (h (b f)))))
+(define iden (lambda (u) u)) 
+;	
+;	(define (c->i chrch)
+;	  (
+;	  (chrch
+;		(lambda (a) (+ a 1))
+;	  )
+;	  0
+;	  )
+;	)
+;	
+;	(define (i->c n)
+;		(if (= n 0)
+;			zero
+;			(succ (i->c (- n 1)))
+;		)
+;	)
+;	
 	;church to int
 	;int -1
 	;int to church 
-	(define i (c->i l))
-	(i->c (- i 1))
-)
+;	(define i (c->i l))
+;	(i->c (- i 1))
+
 
 
 
@@ -248,13 +271,26 @@
 (define old* *)
 (define old/ /)
 
+(define (make-type z)
+	(inspect (type z))
+	(cond	((equal? (type z) 'INTEGER) (makeInteger z))
+		((String? z) (makeString z))
+		(else (makeOther z)))
+)
+
+(define (makeOther x)
+	(list 'Other x)
+)
+
 (define (makeString x)
+	(print "str made")
 	(list 'STRING x)
 )
 (define (makeInteger y)
+	(print "int made")
 	(list 'INTEGER y)
 )
-(define (type a)
+(define (typ a)
 	(car a)
 )
 (define (contents a)
@@ -263,10 +299,10 @@
 
 (define (install-generic)
 	(clearTable)
-	(set! + (lambda( a b) (apply-generic '+ a b)))
-	(set! - (lambda( a b) (apply-generic '- a b)))
-	(set! * (lambda( a b) (apply-generic '* a b)))
-	(set! / (lambda( a b) (apply-generic '/ a b)))
+	(set! + (lambda( a b) (apply-generic '+ (make-type a) (make-type b))))
+	(set! - (lambda( a b) (apply-generic '- (make-type a) (make-type b))))
+	(set! * (lambda( a b) (apply-generic '* (make-type a) (make-type b))))
+	(set! / (lambda( a b) (apply-generic '/ (make-type a) (make-type b))))
 	(putTable '+ '(STRING STRING) addStrings)
 	(putTable '+ '(STRING INTEGER) addStringAndInteger)
 	(putTable '+ '(INTEGER STRING) addIntegerAndString)
@@ -290,11 +326,15 @@
 	'generic-system-uninstalled
 )
 
-(define (apply-generic op . args )
-;	(let* ((types (map type args))
-;		(f (get op types)))
-;		(apply f (map contents args))
-;	)
+(define (apply-generic op arg1 arg2 )
+;	(define arg1 (make-type arg1))
+;	(define arg2 (make-type arg2))
+	(inspect arg1)
+	(inspect arg2)
+	(let ((types (cons (typ arg1) (typ arg2)))
+		(f (get op types)))
+		(apply f (map contents (list arg1 arg2)))
+	)
 )
 
 (define (addStrings s1 s2)
@@ -346,17 +386,20 @@
 	(inspect (iterate i (list 5 7 1) (inspect i) (inspect (* i i))))
 )
 
-;(define (run2)
-;	(define (f x y z) (+ x y z))
-;	(inspect((peval f 1 2 ) 3))
-;)
+(define (run2)
+	(define . 'MISSING)
+	(define (f x y z) (+ x y z))
+	(inspect((peval f 1 . . ) 2 3))
+	(inspect((peval f 1 2 . ) 3))
+	(inspect((peval f 1 2 3)))
+)
 
-;(define (run3)
-;(inspect (Stack))
-;(inspect (push (Stack) 1))
-;(inspect (push (push (Stack) 1)2))
-;(inspect (pop (push (push (Stack) 1) 2)))
-;(inspect (ssize (pop (push (push (Stack) 1) 2))))
+(define (run3)
+(inspect (Stack))
+(inspect (push (Stack) 1))
+(inspect (push (push (Stack) 1)2))
+(inspect (pop (push (push (Stack) 1) 2)))
+(inspect (ssize (pop (push (push (Stack) 1) 2))))
 (define (loop stack queue x)
         (define x (+ x 1 ))
         (if (= x 10)
@@ -372,53 +415,53 @@
             ((!= (qsize q) 0)
                 (inspect (speek q))
                 (dequeuer (dequeue q)))))
-;(define data (loop (Stack) (Queue)0))
-;(popper (car data))
-;(dequeuer (cadr data))
-;)
+(define data (loop (Stack) (Queue)0))
+(popper (car data))
+(dequeuer (cadr data))
+)
 
-;(define (run4)
+(define (run4)
 ;	(no-locals )
-;)
+)
 
-;(define (run5)
-;	(define zero (lambda (f) (lambda (x) x)))
-;	(define one  (lambda (f) (lambda (x) (f x))))
-;	(define two  (lambda (f) (lambda (x) (f (f x)))))
-;	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
-;	(inspect(((pred one)+)0))
-;	(inspect(((pred two)+)1))
-;	(inspect(pred three))
-;)
+(define (run5)
+	(define z (lambda (f) (lambda (x) x)))
+	(define one  (lambda (f) (lambda (x) (f x))))
+	(define two  (lambda (f) (lambda (x) (f (f x)))))
+	(define three  (lambda (f) (lambda (x) (f (f (f x))))))
+	(inspect(((pred one)+)0))
+;	(inspect(((pred two)+)0))
+	(inspect(pred three))
+)
 
 ;(define (run6)
 
 ;)
 
-;(define (run7)
-;	(inspect (queens 0))
-;	(inspect (queens 1))
-;	(inspect (queens 2))
-;	(inspect (queens 3))
-;	(inspect (queens 4))
-;	(inspect (length(queens 5)))
+(define (run7)
+	(inspect (queens 0))
+	(inspect (queens 1))
+	(inspect (queens 2))
+	(inspect (queens 3))
+	(inspect (queens 4))
+	(inspect (length(queens 5)))
 ;	(inspect (length(queens 7)))
-;)
+)
 
-;(define (run8)
-;	(inspect(cxr 'a))
-;	(inspect(cxr 'd))
-;	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
-;	(inspect(cxr 'dddad))
-;	(inspect(cxr 'adddaaa))
-;)
+(define (run8)
+	(inspect(cxr 'a))
+	(inspect(cxr 'd))
+	(inspect((cxr 'ad) (cons 1 (cons 2 (cons 3 nil)))))
+	(inspect(cxr 'dddad))
+	(inspect(cxr 'adddaaa))
+)
 
-;(define (run9)
-;	 (inspect apply-generic)
-;        (inspect (install-generic))
-;       ; (ppTable (+ 0 0))
-;	
-;)
+(define (run9)
+	(inspect apply-generic)
+        (inspect (install-generic))
+      ; (ppTable (+ 0 0))
+	
+)
 
 ;(define (run10)
 
