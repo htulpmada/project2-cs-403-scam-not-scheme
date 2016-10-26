@@ -142,29 +142,6 @@
 (define zero (lambda (u) x))
 (define succ (lambda (b) (lambda (h) (h (b f)))))
 (define iden (lambda (u) u)) 
-;	
-;	(define (c->i chrch)
-;	  (
-;	  (chrch
-;		(lambda (a) (+ a 1))
-;	  )
-;	  0
-;	  )
-;	)
-;	
-;	(define (i->c n)
-;		(if (= n 0)
-;			zero
-;			(succ (i->c (- n 1)))
-;		)
-;	)
-;	
-	;church to int
-	;int -1
-	;int to church 
-;	(define i (c->i l))
-;	(i->c (- i 1))
-
 
 
 
@@ -283,11 +260,11 @@
 )
 
 (define (makeString x)
-	(print "str made")
+	(print "str made ")
 	(list 'STRING x)
 )
 (define (makeInteger y)
-	(print "int made")
+	(print "int made ")
 	(list 'INTEGER y)
 )
 (define (typ a)
@@ -306,6 +283,7 @@
 	(putTable '+ '(STRING STRING) addStrings)
 	(putTable '+ '(STRING INTEGER) addStringAndInteger)
 	(putTable '+ '(INTEGER STRING) addIntegerAndString)
+	(putTable '+ '(INTEGER INTEGER) old+)
 	(putTable '- '(STRING STRING) subStrings)
 	(putTable '- '(STRING INTEGER) subStringAndInteger)
 	(putTable '- '(INTEGER STRING) subIntegerAndString)
@@ -331,8 +309,9 @@
 ;	(define arg2 (make-type arg2))
 	(inspect arg1)
 	(inspect arg2)
-	(let ((types (cons (typ arg1) (typ arg2)))
-		(f (get op types)))
+	(let ((types (list (typ arg1) (typ arg2))))
+		(inspect types)
+		(f (get op types))
 		(apply f (map contents (list arg1 arg2)))
 	)
 )
