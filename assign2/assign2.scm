@@ -249,9 +249,9 @@
 (define old/ /)
 
 (define (make-type z)
-	(inspect (type z))
+;	(inspect (type z))
 	(cond	((equal? (type z) 'INTEGER) (makeInteger z))
-		((String? z) (makeString z))
+		((equal? (type z) 'STRING) (makeString z))
 		(else (makeOther z)))
 )
 
@@ -260,11 +260,11 @@
 )
 
 (define (makeString x)
-	(print "str made ")
+;	(print "str made ")
 	(list 'STRING x)
 )
 (define (makeInteger y)
-	(print "int made ")
+;	(print "int made ")
 	(list 'INTEGER y)
 )
 (define (typ a)
@@ -284,19 +284,39 @@
 	(putTable '+ '(STRING INTEGER) addStringAndInteger)
 	(putTable '+ '(INTEGER STRING) addIntegerAndString)
 	(putTable '+ '(INTEGER INTEGER) old+)
+	(putTable '+ '(Other INTEGER) old+)
+	(putTable '+ '(Other STRING) old+)
+	(putTable '+ '(Other Other) old+)
+	(putTable '+ '(INTEGER Other) old+)
+	(putTable '+ '(STRING Other) old+)
 	;default cases need to add ex. '(Other INTEGER), (Other Other) etc....
 	(putTable '- '(STRING STRING) subStrings)
 	(putTable '- '(STRING INTEGER) subStringAndInteger)
 	(putTable '- '(INTEGER STRING) subIntegerAndString)
 	(putTable '- '(INTEGER INTEGER) old-)
+	(putTable '- '(Other INTEGER) old-)
+	(putTable '- '(Other STRING) old-)
+	(putTable '- '(Other Other) old-)
+	(putTable '- '(INTEGER Other) old-)
+	(putTable '- '(STRING Other) old-)
 	(putTable '* '(STRING STRING) mulStrings)
 	(putTable '* '(STRING INTEGER) mulStringAndInteger)
 	(putTable '* '(INTEGER STRING) mulIntegerAndString)
 	(putTable '* '(INTEGER INTEGER) old*)
+	(putTable '* '(Other INTEGER) old*)
+	(putTable '* '(Other STRING) old*)
+	(putTable '* '(Other Other) old*)
+	(putTable '* '(INTEGER Other) old*)
+	(putTable '* '(STRING Other) old*)
 	(putTable '/ '(STRING STRING) divStrings)
 	(putTable '/ '(STRING INTEGER) divStringAndInteger)
 	(putTable '/ '(INTEGER STRING) divIntegerAndString)
 	(putTable '/ '(INTEGER INTEGER) old/)
+	(putTable '/ '(Other INTEGER) old/)
+	(putTable '/ '(Other STRING) old/)
+	(putTable '/ '(Other Other) old/)
+	(putTable '/ '(INTEGER Other) old/)
+	(putTable '/ '(STRING Other) old/)
 	'generic-system-installed
 	)
 
@@ -311,30 +331,30 @@
 (define (apply-generic op arg1 arg2 )
 ;	(define arg1 (make-type arg1))
 ;	(define arg2 (make-type arg2))
-	(inspect arg1)
-	(inspect arg2)
-	(inspect op)
+;	(inspect arg1)
+;	(inspect arg2)
+;	(inspect op)
 	(let ((types (list (typ arg1) (typ arg2))))
-		(inspect types)
+;		(inspect types)
 		(define f (getTable op types))
-		(inspect f)
-		(inspect (contents arg1))
-		(inspect (contents arg2))
+;		(inspect f)
+;		(inspect (contents arg1))
+;		(inspect (contents arg2))
 		(apply f (map contents (list arg1 arg2)))
 	)
 )
 
 (define (addStrings s1 s2)
-	(append s1 s2)
+	(string-append s1 s2)
 )
 (define (addStringAndInteger s i)
-	(append s (String i))
+	(string-append s (string i))
 )
 (define (addIntegerAndString i s)
-	(old+ i (Integer s))
+	(old+ i (int s))
 )
 (define (subStrings s1 s2)
-
+;	(string-trim s1 char-set:s2)
 )
 (define (subStringAndInteger s i)
 
@@ -446,7 +466,27 @@
 (define (run9)
 	(inspect apply-generic)
         (inspect (install-generic))
-      ; (ppTable (+ 0 0))
+;	(putTable '+ '(STRING STRING) addStrings)
+;	(putTable '+ '(STRING INTEGER) addStringAndInteger)
+;	(putTable '+ '(INTEGER STRING) addIntegerAndString)
+;	(putTable '+ '(INTEGER INTEGER) old+)
+;	(putTable '+ '(Other INTEGER) old+)
+;	(putTable '+ '(Other STRING) old+)
+;	(putTable '+ '(Other Other) old+)
+;	(putTable '+ '(INTEGER Other) old+)
+;	(putTable '+ '(STRING Other) old+)
+        (inspect (+ "x" "y"));"xy"
+        (inspect(+ "123" 4));"1234"
+        (inspect (+ 123 "4"));127
+        (inspect (- "abc" "a"));"bc"
+        (inspect (- "0" 0));() or nil
+        (inspect (- 0 "0"));0
+        (inspect (* "0" "2"));"00"
+        (inspect (* "0" 1));"0"
+        (inspect (* 1 "3"));3
+        (inspect (/ "1111" "2"));"11"
+        (inspect (/ "11" 2));"1"
+        (inspect (/ 5 "1"));5
 	
 )
 
