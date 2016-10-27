@@ -354,37 +354,125 @@
 	(old+ i (int s))
 )
 (define (subStrings s1 s2)
-;	(string-trim s1 char-set:s2)
+	(define (iter s1 s2 ss)
+		(cond	((equal? s1 nil) ss)
+			((equal? s2 nil) (string-append ss s1))
+			((equal? (car s1) (car s2)) (iter (cdr s1) (cdr s2) ss))
+			(else (iter(cdr s1) s2 (string-append ss (car s1)))))
+	)
+	(iter s1 s2 nil)
 )
 (define (subStringAndInteger s i)
+	(define (iter s1 i)
+                (cond   ((equal? s1 nil) nil)
+                        ((= i 0) s1)
+                        (else (iter(cdr s1) (- i 1) )))
+        )
+        (iter s i )
+
 
 )
 (define (subIntegerAndString i s)
-
+	(old- i (int s))
 )
 (define (mulStrings s1 s2)
-
+	(mulStringAndInteger s1 (int s2))
 )
 (define (mulStringAndInteger s i)
-
+	(define (iter s ss c)
+	(cond	((= c 0) 0)
+		((= c 1) s) 
+		(else(iter(addStrings ss s) ss (- c 1))))
+	)
+	(iter s s i)
 )
 (define (mulIntegerAndString i s)
-
+	(old* i (int s))
 )
 (define (divStrings s1 s2)
-
+	(divStringAndInteger s1 (int s2))
 )
 (define (divStringAndInteger s i)
-
+	(define c (/ (length s) i))
+	(inspect c)
+	(define (iter s ss c)
+	(cond	((= (int c) 0) (print "oops paradox"))
+		((= (int c) 1) (string-append s (car ss))) 
+		(else(iter (string-append s (car ss)) (cdr ss) (- c 1))))
+	)
+	(iter nil s c)
 )
 (define (divIntegerAndString i s)
-
+	(old/ i (int s))
 )
 
+;---------------------- task 10----------------;
 
+(define (coerce thing tag)
+	(makeTag thing)
+	(apply-coerce (makeTag thing) tag)
+)
 
+(define (makeTag t)
+	(cond	((equal? (type t) 'STRING) (cons 'STRING t))
+		((equal? (type t) 'INTEGER) (cons 'INTEGER t))
+		((equal? (type t) 'REAL) (cons 'REAL t))
+		((equal? (type t) 'CONS) (cons 'LIST t))
+		(else (print "unrecognized type")))
+)
 
+(define (install-coercion)
+	(clearTable)
+	(putTable 'INTEGER 'REAL i->r)
+	(putTable 'INTEGER 'STRING i->s)
+	(putTable 'REAL 'INTEGER r->i)
+	(putTable 'REAL 'STRING r->s)
+	(putTable 'STRING 'REAL s->r)
+	(putTable 'STRING 'INTEGER s->i)
+	(putTable 'LIST 'STRING l->s)
+	'coerce-system-installed
+)
 
+(define (apply-coerce thing tag)
+	 (let ((t (typ thing)))
+;               (inspect t)
+;               (inspect (cdr thing))
+                (define f (getTable t tag))
+;               (inspect f)
+;               (inspect (contents arg1))
+;               (inspect (contents arg2))
+                (f (cdr thing))
+	)
+)
+
+(define (i->r i)
+;	(inspect i)
+	(real i)
+)
+(define (i->s i)
+;	(inspect i)
+	(string i)
+)
+(define (r->i r)
+;	(inspect r)
+	(int r)
+)
+(define (r->s r)
+;	(inspect r)
+	(string r)
+)
+(define (s->r s)
+;	(inspect s)
+	(real s)
+)
+(define (s->i s)
+;	(inspect s)
+	(int s)
+)
+(define (l->s l)
+;	(inspect l)
+	(string l)
+)
 
 ;-----------------------------test functions----------------------------------
 (define (run1)
@@ -464,35 +552,51 @@
 )
 
 (define (run9)
+;------preliminary------------;
 	(inspect apply-generic)
         (inspect (install-generic))
-;	(putTable '+ '(STRING STRING) addStrings)
-;	(putTable '+ '(STRING INTEGER) addStringAndInteger)
-;	(putTable '+ '(INTEGER STRING) addIntegerAndString)
-;	(putTable '+ '(INTEGER INTEGER) old+)
-;	(putTable '+ '(Other INTEGER) old+)
-;	(putTable '+ '(Other STRING) old+)
-;	(putTable '+ '(Other Other) old+)
-;	(putTable '+ '(INTEGER Other) old+)
-;	(putTable '+ '(STRING Other) old+)
-        (inspect (+ "x" "y"));"xy"
-        (inspect(+ "123" 4));"1234"
-        (inspect (+ 123 "4"));127
-        (inspect (- "abc" "a"));"bc"
-        (inspect (- "0" 0));() or nil
-        (inspect (- 0 "0"));0
-        (inspect (* "0" "2"));"00"
-        (inspect (* "0" 1));"0"
-        (inspect (* 1 "3"));3
-        (inspect (/ "1111" "2"));"11"
-        (inspect (/ "11" 2));"1"
-        (inspect (/ 5 "1"));5
+
+;----------- a = was in assignment description--------;
+
+        (inspect (+ "x" "y"));"xy"	a
+        (inspect(+ "123" 4));"1234"	a
+        (inspect (+ 123 "4"));127	a
+        (inspect (- "abc" "a"));"bc"	x
+        (inspect (- "abc" "ac"));"bc"	x
+        (inspect (- "abc" "ab"));"bc"	x
+        (inspect (- "abc" "bc"));"bc"	x
+        (inspect (- "abc" "c"));"bc"	x
+        (inspect (- "000" 1));00	a
+        (inspect (- 0 "0"));0		a
+        (inspect (- 5 "3"));0		a
+        (inspect (* "0" "2"));"00"	x
+        (inspect (* "0" 4));"0"		a
+        (inspect (* 5 "3"));3		a
+        (inspect (/ "1111" "2"));"11"	x
+        (inspect (/ "11" 2));"1"	x
+        (inspect (/ 5 "1"));5		a
 	
+	(uninstall-generic)	
+
 )
 
-;(define (run10)
-
-;)
+(define (run10)
+	(install-coercion)
+	(inspect (coerce 5 'REAL))
+	(inspect (type (coerce 5 'REAL)))
+	(inspect (coerce 5 'STRING))
+	(inspect (type (coerce 5 'STRING)))
+	(inspect (coerce 5.0 'INTEGER))
+	(inspect (type (coerce 5.0 'INTEGER)))
+	(inspect (coerce 5.0 'STRING))
+	(inspect (type (coerce 5.0 'STRING)))
+	(inspect (coerce "5" 'INTEGER))
+	(inspect (type (coerce "5" 'INTEGER)))
+	(inspect (coerce "5" 'REAL))
+	(inspect (type (coerce "5" 'REAL)))
+	(inspect (coerce (list 5 4 3 2 1) 'STRING))
+	(inspect (type (coerce (list 5 4 3 2 1) 'STRING)))
+)
 
 ;(run1)
 ;(run2)
