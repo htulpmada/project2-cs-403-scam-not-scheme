@@ -45,21 +45,34 @@
 (define (peval fn @)
 
 ;	(inspect @)
-	(define (ffn @)
-		(define arg1 @)
+	(define (ffn arg1)
 ;		(inspect arg1)
-		(lambda (opt-arg)
-			(cond((null? opt-arg) arg1)
-				;(inspect 2)
-				;((null? agr1) opt-arg)
-				(ffn (fn (car opt-arg) ag1))
-			)
+		(lambda (@)
+;		(inspect @)
+		(inspect (merge arg1 @))
+;		(cond	((null? @) arg1)
+;				(( ) )
+;				(( ) )
+;			)
 		)
 	)
-	(inspect @)
-	ffn
+;	(inspect @)
+	(ffn @)
 )
 
+(define (merge s1 s2 )
+	(define (iter strm1 strm2 ms)
+		(inspect strm1)
+		(inspect strm2)
+		(cond
+			((equal? strm2 nil) (inspect strm1) strm1)
+			((equal? (car strm1) 'MISSING) (append ms (car strm2)));need to fix here somewhere
+			(else (inspect "recur")(iter (cdr strm1) strm2 (append ms (car strm1))))
+		)
+	)
+	(inspect (iter s1 s2 nil))
+;	(iter s1 s2 nil)
+)
 
 ;-----------task 3-----------;
 
