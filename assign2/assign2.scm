@@ -19,7 +19,6 @@
 	)
 	(define ll (eval l this))
 	(define (it scope $i lst lam)
-;(inspect lst)
 	  (cond ((=(length lst) 1)   
 		(define $i (car lst))
 		(eval (ll $i) scope)
@@ -29,8 +28,6 @@
 			(it scope $i (cdr lst) lam)))
 )
 	(define $i (car lst))
-;(inspect $i)
-;	(eval (ll $i) #)
 	(it # $i lst ll)
 )
 
@@ -66,8 +63,6 @@
 ;-----------task 3-----------;
 
 (define (Stack)
-	;(cons 0 nil)
-	(define size 0)
 	(define store nil)
 )
 (define (push store x)
@@ -113,19 +108,28 @@
 	((empty? store) sz)
 	(else (itersize (+ 1 sz) (cdr store)))))
 	(itersize 0 store)
-;(length store)
 )
 
 ;----------task 4----------;
 
 (define (no-locals @)
-	(define lam (cons
-	 (car (car @)) (cdr (car @))))
-	(inspect (car lam))
-	(inspect (cdr lam))
-;	(cond
-;	((? lam nil) lam)
-;	(no-locals (cdr lam));)
+	(define l (car @))
+	(define fin (list (car l) (car (cdr l))))
+	(inspect l)
+	(inspect fin)
+	(define l (car(cdr(cdr l))))
+	(inspect l)
+	(define (iter lst final)
+		(define lam (cons final (cdr (car lst))))
+		(inspect lam)
+		(inspect (car lam))
+		(inspect (cdr lam))
+		(cond
+			((equal? lam nil) lam)
+			(else(no-locals (cdr lam)))
+		)
+	)
+	(iter @ fin)
 )
 
 
@@ -519,9 +523,9 @@
 (dequeuer (cadr data))
 )
 
-(define (run4)
-;	(no-locals )
-)
+;(define (run4)
+;	(no-locals '(define (nsq a) (define x (+ a 1)) (* x x)))
+;)
 
 (define (run5)
 	(define z (lambda (f) (lambda (x) x)))
