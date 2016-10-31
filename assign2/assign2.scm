@@ -36,42 +36,31 @@
 
 ;-----------task 2-----------;
 
-;(define (peval f . a) 
-;	(define l 
-;(lambda (b) (f b a)))
-;(inspect l)
-;)
 
 (define (peval fn @)
 
-;	(inspect @)
 	(define (ffn arg1)
-;		(inspect arg1)
 		(lambda (@)
-;		(inspect @)
-		(inspect (merge arg1 @))
-;		(cond	((null? @) arg1)
-;				(( ) )
-;				(( ) )
-;			)
+		(define a (merge arg1 @))
+		(apply fn a)
 		)
 	)
-;	(inspect @)
 	(ffn @)
 )
 
 (define (merge s1 s2 )
 	(define (iter strm1 strm2 ms)
-		(inspect strm1)
-		(inspect strm2)
 		(cond
-		;	((equal? strm2 nil) (inspect strm1) strm1)
-		;	((equal? (car strm1) 'MISSING) (append ms (car strm2)));need to fix here somewhere
-		;	(else (inspect "recur")(iter (cdr strm1) strm2 (append ms (car strm1))))
+			((equal? strm1 nil) (reverse ms))
+			((equal? (car strm1) 'MISSING)
+				(iter (cdr strm1) (cdr strm2) (cons (car strm2) ms))
+			)
+			(else
+				(iter (cdr strm1) strm2 (cons (car strm1) ms))
+			)
 		)
 	)
-	(inspect (iter s1 s2 nil))
-;	(iter s1 s2 nil)
+	(iter s1 s2 nil)
 )
 
 ;-----------task 3-----------;
@@ -500,6 +489,8 @@
 	(inspect((peval f 1 . . ) 2 3))
 	(inspect((peval f 1 2 . ) 3))
 	(inspect((peval f 1 2 3)))
+	(inspect((peval f . 2 . ) 1 3))
+	(inspect((peval f . . 3 ) 1 2))
 )
 
 (define (run3)
