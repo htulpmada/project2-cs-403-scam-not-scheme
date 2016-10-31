@@ -65,9 +65,9 @@
 		(inspect strm1)
 		(inspect strm2)
 		(cond
-			((equal? strm2 nil) (inspect strm1) strm1)
-			((equal? (car strm1) 'MISSING) (append ms (car strm2)));need to fix here somewhere
-			(else (inspect "recur")(iter (cdr strm1) strm2 (append ms (car strm1))))
+		;	((equal? strm2 nil) (inspect strm1) strm1)
+		;	((equal? (car strm1) 'MISSING) (append ms (car strm2)));need to fix here somewhere
+		;	(else (inspect "recur")(iter (cdr strm1) strm2 (append ms (car strm1))))
 		)
 	)
 	(inspect (iter s1 s2 nil))
