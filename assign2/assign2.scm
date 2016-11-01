@@ -62,91 +62,103 @@
 
 ;-----------task 3-----------;
 
+
+;----STACK----;
 (define (Stack)
+	(define size 0)
 	(define store nil)
+	(cons size store)
 )
 (define (push store x)
-	
-	(define store (cons x store))
+	(define size (+ (car store) 1))
+	(define store (cons x (cdr store)))
+	(cons size store)
 )
 (define (speek store)
-	(define tmp (car store));))
+	(car(cdr store))
 )
 (define (pop store)
-	(define store (cdr store))
+	(define size (- (car store) 1))
+	(define store (cdr (cdr store)))
+	(cons size store)
 )
 (define (empty? store)
-	(eq? store nil)
+	(eq? (car store) 0)
 )
 (define (ssize store)
-	(define (itersize sz store)
-	(cond
-	((empty? store) sz)
-	(else (itersize (+ 1 sz) (cdr store)))))
-	(itersize 0 store)
+	(car store)
 )
 
-
+;----QUEUE----;
 (define (Queue)
+	(define size 0)
 	(define store nil)
+	(cons size store)
 )
 (define (enqueue store x)
-	(define store (append store (list x)))
+	(define size (+ (car store) 1))
+	(define s (append (cdr store) (list x)))
+	(cons size s)
 )
 (define (dequeue store)
-	(define store (cdr store))
+	(define size (- (car store) 1))
+	(define store (cdr (cdr store)))
+	(cons size store)
 )
 (define (qpeek store)
-	(define tmp (car store))
+	(car (cdr store))
 )
 (define (empty? store)
-	(eq? store nil)
+	(eq? (car store) 0)
 )
 (define (qsize store)
-	(define (itersize sz store)
-	(cond
-	((empty? store) sz)
-	(else (itersize (+ 1 sz) (cdr store)))))
-	(itersize 0 store)
+	(car store)
 )
 
 ;----------task 4----------;
 
-(define (no-locals @)
-	(define l (car @))
-	(define fin (list (car l) (car (cdr l))))
-	(inspect l)
-	(inspect fin)
-	(define l (car(cdr(cdr l))))
-	(inspect l)
-	(define (iter lst final)
-		(define lam (cons final (cdr (car lst))))
-		(inspect lam)
-		(inspect (car lam))
-		(inspect (cdr lam))
-		(cond
-			((equal? lam nil) lam)
-			(else(no-locals (cdr lam)))
-		)
-	)
-	(iter @ fin)
+
+(define (no-locals original)
+    (define (iter c p a)
+        (define s (car c))
+        (if (list? s)
+            (if (== (car s) 'define)
+                (if (== (length p) 0)
+                    (if (== (length a) 0)
+                        (iter (cdr c) (list (cadr s)) (list (caddr s)))
+                        (iter (cdr c) (list (cadr s)) (append a (list (caddr s))))
+                    )
+                    (if (== (length a) 0)
+                        (iter (cdr c) (append p (list (cadr s))) (list (caddr s)))
+                        (iter (cdr c) (append p (list (cadr s))) (append a (list (caddr s))))
+                    )
+                )
+                (append (list (list 'lambda p s)) a)
+            )
+            (append (list (list 'lambda p s)) a)
+        )
+    )
+    (list (car original) (cadr original) (iter (cddr original) '() '()))
 )
+
 
 
 ;-------------task 5-----------;
 
 (define pred 
-;(define pred
-	    (lambda (n)
+	(lambda (n)
 		(lambda (f)
-		    (lambda (x)
-			(((n succ) (lambda (u) x)) (lambda (u) u))
-		    )
+			(lambda (x)
+				(((n succ) (lambda (u) x)) (lambda (u) u))
+			)
 		)
-	    )
 	)
+)
+
 (define zero (lambda (u) x))
+
 (define succ (lambda (b) (lambda (h) (h (b f)))))
+
 (define iden (lambda (u) u)) 
 
 
@@ -264,7 +276,7 @@
 	(define (customEval arg)
 		(cond
 		((null? arg) nil)
-		((equal? (car arg) "a");------------this is backwards------- 
+		((equal? (car arg) "a");------------this is backwards reverse when finished ------- 
 			(cons '(define x (car x)) (customEval (cdr arg)))
 		)
 		((equal? (car arg) "d") 
@@ -287,7 +299,6 @@
 (define old/ /)
 
 (define (make-type z)
-;	(inspect (type z))
 	(cond	((equal? (type z) 'INTEGER) (makeInteger z))
 		((equal? (type z) 'STRING) (makeString z))
 		(else (makeOther z)))
@@ -298,11 +309,9 @@
 )
 
 (define (makeString x)
-;	(print "str made ")
 	(list 'STRING x)
 )
 (define (makeInteger y)
-;	(print "int made ")
 	(list 'INTEGER y)
 )
 (define (typ a)
@@ -327,7 +336,6 @@
 	(putTable '+ '(Other Other) old+)
 	(putTable '+ '(INTEGER Other) old+)
 	(putTable '+ '(STRING Other) old+)
-	;default cases need to add ex. '(Other INTEGER), (Other Other) etc....
 	(putTable '- '(STRING STRING) subStrings)
 	(putTable '- '(STRING INTEGER) subStringAndInteger)
 	(putTable '- '(INTEGER STRING) subIntegerAndString)
@@ -367,17 +375,8 @@
 )
 
 (define (apply-generic op arg1 arg2 )
-;	(define arg1 (make-type arg1))
-;	(define arg2 (make-type arg2))
-;	(inspect arg1)
-;	(inspect arg2)
-;	(inspect op)
 	(let ((types (list (typ arg1) (typ arg2))))
-;		(inspect types)
 		(define f (getTable op types))
-;		(inspect f)
-;		(inspect (contents arg1))
-;		(inspect (contents arg2))
 		(apply f (map contents (list arg1 arg2)))
 	)
 )
@@ -548,16 +547,16 @@
 (define (dequeuer q)
         (cond
             ((!= (qsize q) 0)
-                (inspect (speek q))
+                (inspect (qpeek q))
                 (dequeuer (dequeue q)))))
 (define data (loop (Stack) (Queue)0))
 (popper (car data))
 (dequeuer (cadr data))
 )
 
-;(define (run4)
-;	(no-locals '(define (nsq a) (define x (+ a 1)) (* x x)))
-;)
+(define (run4)
+	(inspect (no-locals '(define (nsq a) (define x (+ a 1)) (* x x))))
+)
 
 (define (run5)
 	(define z (lambda (f) (lambda (x) x)))
