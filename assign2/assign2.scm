@@ -150,19 +150,47 @@
 (define iden (lambda (u) u)) 
 
 
+;-----------task 6-------------;
+
+(define (treeNode val left right)
+	(list val left right)
+)
+(define (getL t)
+;	(inspect (getElement t 1))
+	(getElement t 1)
+)
+(define (getR t)
+;	(inspect (getElement t 2))
+	(getElement t 2)
+)
+(define (getV t)
+;	(inspect (getElement t 0))
+	(getElement t 0)
+)
+
+(define (treeflatten tree)
+	(define (flat t dep)
+;		(inspect t)
+;		(inspect dep)
+		(cond 	((null? t) '())
+			((and (null? (getR t)) (null? (getL t))) (list(list dep (getV t))))
+			(else 	(append (flat (getL t)(+ dep 1))
+					(flat (getR t)(+ dep 1))
+				)
+			)
+		)
+	)
+	(flat tree 0)
+)
+
+(define (treedepth tree)
+	(define new-tree (treeflatten tree))
+	(define l (length new-tree))
+;accumulATE	
+)
 
 ;-----------task 7-------------;
 
-;(define (run7)
-;	(inspect (queens 0))
-;	(inspect (queens 1))
-;	(inspect (queens 2))
-;	(inspect (queens 3))
-;	(inspect (queens 4))
-;	(inspect (length(queens 5)))
-;	(inspect (length(queens 7)))
-;)
-;queens function
 
 (define (enum low high)
 	(if (> low high)
@@ -206,7 +234,7 @@
 (define empty-b '())
 
 (define (adjoinPos new-r k rest)
-	(cons (list k new-r) rest))
+	(cons (list (- k 1) new-r) rest))
 
 (define (safe k posistions)
 	(define (safe-r?)
@@ -537,9 +565,11 @@
 	(inspect(pred three))
 )
 
-;(define (run6)
-
-;)
+(define (run6)
+	(define l (treeNode 1 (treeNode 2 (treeNode 3 nil nil) (treeNode 4 nil nil)) nil))
+	(inspect (treedepth l))
+	(inspect (treeflatten l))
+)
 
 (define (run7)
 	(inspect (queens 0))
@@ -570,10 +600,10 @@
         (inspect(+ "123" 4));"1234"	a
         (inspect (+ 123 "4"));127	a
         (inspect (- "abc" "a"));"bc"	x
-        (inspect (- "abc" "ac"));"bc"	x
-        (inspect (- "abc" "ab"));"bc"	x
-        (inspect (- "abc" "bc"));"bc"	x
-        (inspect (- "abc" "c"));"bc"	x
+        (inspect (- "abc" "ac"));"b"	x
+        (inspect (- "abc" "ab"));"c"	x
+        (inspect (- "abc" "bc"));"a"	x
+        (inspect (- "abc" "c"));"ab"	x
         (inspect (- "000" 1));00	a
         (inspect (- 0 "0"));0		a
         (inspect (- 5 "3"));0		a
