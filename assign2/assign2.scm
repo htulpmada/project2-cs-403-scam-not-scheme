@@ -156,22 +156,26 @@
 	(list val left right)
 )
 (define (getL t)
-;	(inspect (getElement t 1))
 	(getElement t 1)
 )
 (define (getR t)
-;	(inspect (getElement t 2))
 	(getElement t 2)
 )
 (define (getV t)
-;	(inspect (getElement t 0))
 	(getElement t 0)
+)
+
+(define (accu op init seq)
+	(if (null? seq)
+		init
+		(op (car (car seq))
+			(accu op init (cdr seq))
+		)
+	)
 )
 
 (define (treeflatten tree)
 	(define (flat t dep)
-;		(inspect t)
-;		(inspect dep)
 		(cond 	((null? t) '())
 			((and (null? (getR t)) (null? (getL t))) (list(list dep (getV t))))
 			(else 	(append (flat (getL t)(+ dep 1))
@@ -185,8 +189,8 @@
 
 (define (treedepth tree)
 	(define new-tree (treeflatten tree))
-	(define l (length new-tree))
-;accumulATE	
+	(define l (real(length new-tree)))
+	( / (accu + 0 new-tree) l)
 )
 
 ;-----------task 7-------------;
@@ -567,8 +571,11 @@
 
 (define (run6)
 	(define l (treeNode 1 (treeNode 2 (treeNode 3 nil nil) (treeNode 4 nil nil)) nil))
+	(define ll (treeNode 1 (treeNode 2 (treeNode 3 nil nil) (treeNode 4 nil nil)) (treeNode 5 nil nil)))
 	(inspect (treedepth l))
 	(inspect (treeflatten l))
+	(inspect (treedepth ll))
+	(inspect (treeflatten ll))
 )
 
 (define (run7)
